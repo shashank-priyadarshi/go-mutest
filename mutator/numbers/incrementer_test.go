@@ -3,7 +3,7 @@ package numbers
 import (
 	"testing"
 
-	"github.com/avito-tech/go-mutesting/test"
+	"github.com/JekaMas/go-mutesting/test"
 )
 
 func TestMutatorNumbersIncrementer(t *testing.T) {

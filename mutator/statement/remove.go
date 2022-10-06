@@ -5,8 +5,8 @@ import (
 	"go/token"
 	"go/types"
 
-	"github.com/avito-tech/go-mutesting/astutil"
-	"github.com/avito-tech/go-mutesting/mutator"
+	"github.com/JekaMas/go-mutesting/astutil"
+	"github.com/JekaMas/go-mutesting/mutator"
 )
 
 func init() {

@@ -23,7 +23,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 
-	"github.com/avito-tech/go-mutesting/internal/models"
+	"github.com/JekaMas/go-mutesting/internal/models"
 )
 
 func packagesWithFilesOfArgs(args []string, opts *models.Options) map[string]map[string]struct{} {
