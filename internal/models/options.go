@@ -1,5 +1,7 @@
 package models
 
+import "math/big"
+
 // Options Main config structure
 type Options struct {
 	General struct {
@@ -40,10 +42,11 @@ type Options struct {
 	} `positional-args:"true" required:"true"`
 
 	Config struct {
-		SkipFileWithoutTest  bool     `yaml:"skip_without_test"`
-		SkipFileWithBuildTag bool     `yaml:"skip_with_build_tags"`
-		JSONOutput           bool     `yaml:"json_output"`
-		SilentMode           bool     `yaml:"silent_mode"`
-		ExcludeDirs          []string `yaml:"exclude_dirs"`
+		SkipFileWithoutTest  bool       `yaml:"skip_without_test"`
+		SkipFileWithBuildTag bool       `yaml:"skip_with_build_tags"`
+		JSONOutput           bool       `yaml:"json_output"`
+		SilentMode           bool       `yaml:"silent_mode"`
+		ExcludeDirs          []string   `yaml:"exclude_dirs"`
+		MinMsi               *big.Float `yaml:"min_msi"`
 	}
 }

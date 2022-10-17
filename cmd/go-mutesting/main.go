@@ -10,10 +10,10 @@ import (
 	"go/printer"
 	"go/token"
 	"go/types"
-	"gopkg.in/yaml.v3"
 	"io"
 	"io/ioutil"
 	"log"
+	"math/big"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -21,10 +21,13 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/JekaMas/go-mutesting/internal/importing"
-	"github.com/JekaMas/go-mutesting/internal/models"
+	"gopkg.in/yaml.v3"
+
 	"github.com/jessevdk/go-flags"
 	"github.com/zimmski/osutil"
+
+	"github.com/JekaMas/go-mutesting/internal/importing"
+	"github.com/JekaMas/go-mutesting/internal/models"
 
 	"github.com/JekaMas/go-mutesting"
 	"github.com/JekaMas/go-mutesting/astutil"
@@ -302,6 +305,11 @@ MUTATOR:
 	}
 
 	verbose(opts, "Save report into %q", models.ReportFileName)
+
+	fmt.Println("!!!!!!!!!!!!!!!!", report.MsiScore(), opts.Config.MinMsi.String())
+	if big.NewFloat(report.MsiScore()).Cmp(opts.Config.MinMsi) < 0 {
+		return exitError("The MSI %f is less than the minimum allowed value %f", report.MsiScore(), opts.Config.MinMsi)
+	}
 
 	return returnOk
 }
