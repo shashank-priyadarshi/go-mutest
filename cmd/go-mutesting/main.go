@@ -84,13 +84,18 @@ func checkArguments(args []string, opts *models.Options) (bool, int) {
 	}
 
 	if opts.General.Config != "" {
-		yamlFile, err := ioutil.ReadFile(opts.General.Config)
+		yamlFile, err := os.ReadFile(opts.General.Config)
 		if err != nil {
 			return true, exitError("Could not read config file: %q", opts.General.Config)
 		}
 		err = yaml.Unmarshal(yamlFile, &opts.Config)
 		if err != nil {
 			return true, exitError("Could not unmarshall config file: %q, %v", opts.General.Config, err)
+		}
+
+		// default values
+		if opts.Config.MinMsi == nil {
+			opts.Config.MinMsi = big.NewFloat(0)
 		}
 	}
 
@@ -122,6 +127,8 @@ type mutatorItem struct {
 
 func mainCmd(args []string) int {
 	var opts = &models.Options{}
+	opts.Config.MinMsi = big.NewFloat(0)
+
 	var mutationBlackList = map[string]struct{}{}
 
 	if exit, exitCode := checkArguments(args, opts); exit {
@@ -158,7 +165,7 @@ func mainCmd(args []string) int {
 
 	if len(opts.Files.Blacklist) > 0 {
 		for _, f := range opts.Files.Blacklist {
-			c, err := ioutil.ReadFile(f)
+			c, err := os.ReadFile(f)
 			if err != nil {
 				return exitError("Cannot read blacklist file %q: %v", f, err)
 			}
@@ -306,8 +313,9 @@ MUTATOR:
 
 	verbose(opts, "Save report into %q", models.ReportFileName)
 
-	fmt.Println("!!!!!!!!!!!!!!!!", report.MsiScore(), opts.Config.MinMsi.String())
-	if big.NewFloat(report.MsiScore()).Cmp(opts.Config.MinMsi) < 0 {
+	fmt.Printf("MSI minimal %s, actual %s\n", opts.Config.MinMsi.Text('f', 6), report.MsiScore().Text('f', 6))
+
+	if report.MsiScore().Cmp(opts.Config.MinMsi) < 0 {
 		return exitError("The MSI %f is less than the minimum allowed value %f", report.MsiScore(), opts.Config.MinMsi)
 	}
 

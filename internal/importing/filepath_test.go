@@ -2,15 +2,24 @@ package importing
 
 import (
 	"fmt"
-	"github.com/JekaMas/go-mutesting/internal/models"
 	"os"
+	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/JekaMas/go-mutesting/internal/models"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFilesOfArgs(t *testing.T) {
-	p := os.Getenv("GOPATH") + "/src/"
+	wd, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := filepath.Clean(filepath.Join(wd, "../..")) + "/"
 
 	for _, test := range []struct {
 		args   []string
@@ -43,25 +52,25 @@ func TestFilesOfArgs(t *testing.T) {
 		{
 			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures"},
 			[]string{
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/first.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/second.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/third.go",
+				p + "internal/importing/filepathfixtures/first.go",
+				p + "internal/importing/filepathfixtures/second.go",
+				p + "internal/importing/filepathfixtures/third.go",
 			},
 		},
 		{
 			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/..."},
 			[]string{
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/first.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/second.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/third.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/secondfixturespackage/fourth.go",
+				p + "internal/importing/filepathfixtures/first.go",
+				p + "internal/importing/filepathfixtures/second.go",
+				p + "internal/importing/filepathfixtures/third.go",
+				p + "internal/importing/filepathfixtures/secondfixturespackage/fourth.go",
 			},
 		},
 	} {
 		var opts = &models.Options{}
 		got := FilesOfArgs(test.args, opts)
 
-		assert.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+		require.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
 	}
 }
 
@@ -101,31 +110,31 @@ func TestPackagesWithFilesOfArgs(t *testing.T) {
 		},
 		// packages
 		{
-			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures"},
+			[]string{"internal/importing/filepathfixtures"},
 			[]Package{{
-				Name: p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures",
+				Name: p + "internal/importing/filepathfixtures",
 				Files: []string{
-					p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/first.go",
-					p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/second.go",
-					p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/third.go",
+					p + "internal/importing/filepathfixtures/first.go",
+					p + "internal/importing/filepathfixtures/second.go",
+					p + "internal/importing/filepathfixtures/third.go",
 				},
 			}},
 		},
 		{
-			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/..."},
+			[]string{"internal/importing/filepathfixtures/..."},
 			[]Package{
 				{
-					Name: p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures",
+					Name: p + "internal/importing/filepathfixtures",
 					Files: []string{
-						p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/first.go",
-						p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/second.go",
-						p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/third.go",
+						p + "internal/importing/filepathfixtures/first.go",
+						p + "internal/importing/filepathfixtures/second.go",
+						p + "internal/importing/filepathfixtures/third.go",
 					},
 				},
 				{
-					Name: p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/secondfixturespackage",
+					Name: p + "internal/importing/filepathfixtures/secondfixturespackage",
 					Files: []string{
-						p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/secondfixturespackage/fourth.go",
+						p + "internal/importing/filepathfixtures/secondfixturespackage/fourth.go",
 					},
 				},
 			},
@@ -161,10 +170,10 @@ func TestFilesWithSkipWithoutTests(t *testing.T) {
 		},
 		// packages
 		{
-			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/..."},
+			[]string{"internal/importing/filepathfixtures/..."},
 			[]string{
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/second.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/third.go",
+				p + "internal/importing/filepathfixtures/second.go",
+				p + "internal/importing/filepathfixtures/third.go",
 			},
 		},
 	} {
@@ -203,9 +212,9 @@ func TestFilesWithSkipWithBuildTagsTests(t *testing.T) {
 		},
 		// packages
 		{
-			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/..."},
+			[]string{"internal/importing/filepathfixtures/..."},
 			[]string{
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/second.go",
+				p + "internal/importing/filepathfixtures/second.go",
 			},
 		},
 	} {
@@ -278,23 +287,23 @@ func TestFilesWithExcludedDirs(t *testing.T) {
 
 		//packages
 		{
-			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/..."},
+			[]string{"internal/importing/filepathfixtures/..."},
 			[]string{
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/first.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/second.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/third.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/secondfixturespackage/fourth.go",
+				p + "internal/importing/filepathfixtures/first.go",
+				p + "internal/importing/filepathfixtures/second.go",
+				p + "internal/importing/filepathfixtures/third.go",
+				p + "internal/importing/filepathfixtures/secondfixturespackage/fourth.go",
 			},
 			[]string{"filepathfixtures"},
 		},
 		{
-			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/..."},
+			[]string{"internal/importing/filepathfixtures/..."},
 			[]string{
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/first.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/second.go",
-				p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/third.go",
+				p + "internal/importing/filepathfixtures/first.go",
+				p + "internal/importing/filepathfixtures/second.go",
+				p + "internal/importing/filepathfixtures/third.go",
 			},
-			[]string{p + "github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/secondfixturespackage/"},
+			[]string{p + "internal/importing/filepathfixtures/secondfixturespackage/"},
 		},
 	} {
 		var opts = &models.Options{}

@@ -1,3 +1,3 @@
-// +build fixtures
+//go:build fixtures
 
 package filepathfixtures
