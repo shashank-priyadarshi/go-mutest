@@ -21,26 +21,28 @@ func TestFilesOfArgs(t *testing.T) {
 
 	p := filepath.Clean(filepath.Join(wd, "../..")) + "/"
 
-	for _, test := range []struct {
+	cases := []struct {
+		name   string
 		args   []string
 		expect []string
 	}{
-		// empty
 		{
+			"empty",
 			[]string{},
 			[]string{"filepath.go", "import.go"},
 		},
-		// files
 		{
+			"files",
 			[]string{"./filepathfixtures/first.go"},
 			[]string{"./filepathfixtures/first.go"},
 		},
-		// directories
 		{
+			"directory",
 			[]string{"./filepathfixtures"},
 			[]string{"filepathfixtures/first.go", "filepathfixtures/second.go", "filepathfixtures/third.go"},
 		},
 		{
+			"sub-directory",
 			[]string{"../importing/filepathfixtures"},
 			[]string{
 				"../importing/filepathfixtures/first.go",
@@ -48,8 +50,8 @@ func TestFilesOfArgs(t *testing.T) {
 				"../importing/filepathfixtures/third.go",
 			},
 		},
-		// packages
 		{
+			"package",
 			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures"},
 			[]string{
 				p + "internal/importing/filepathfixtures/first.go",
@@ -58,6 +60,7 @@ func TestFilesOfArgs(t *testing.T) {
 			},
 		},
 		{
+			"packages",
 			[]string{"github.com/JekaMas/go-mutesting/internal/importing/filepathfixtures/..."},
 			[]string{
 				p + "internal/importing/filepathfixtures/first.go",
@@ -66,33 +69,40 @@ func TestFilesOfArgs(t *testing.T) {
 				p + "internal/importing/filepathfixtures/secondfixturespackage/fourth.go",
 			},
 		},
-	} {
-		var opts = &models.Options{}
-		got := FilesOfArgs(test.args, opts)
+	}
 
-		require.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+	for _, test := range cases {
+		test := test
+
+		t.Run(test.name, func(t *testing.T) {
+			var opts = &models.Options{}
+			got := FilesOfArgs(test.args, opts)
+
+			require.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+		})
 	}
 }
 
 func TestPackagesWithFilesOfArgs(t *testing.T) {
 	p := os.Getenv("GOPATH") + "/src/"
 
-	for _, test := range []struct {
+	testCases := []struct {
+		name   string
 		args   []string
 		expect []Package
 	}{
-		// empty
 		{
+			"empty",
 			[]string{},
 			[]Package{{Name: ".", Files: []string{"filepath.go", "import.go"}}},
 		},
-		// files
 		{
+			"files",
 			[]string{"./filepathfixtures/first.go"},
 			[]Package{{Name: "filepathfixtures", Files: []string{"./filepathfixtures/first.go"}}},
 		},
-		// directories
 		{
+			"directories",
 			[]string{"./filepathfixtures"},
 			[]Package{{Name: "filepathfixtures", Files: []string{
 				"filepathfixtures/first.go",
@@ -101,6 +111,7 @@ func TestPackagesWithFilesOfArgs(t *testing.T) {
 			}}},
 		},
 		{
+			"relative directories",
 			[]string{"../importing/filepathfixtures"},
 			[]Package{{Name: "../importing/filepathfixtures", Files: []string{
 				"../importing/filepathfixtures/first.go",
@@ -108,8 +119,8 @@ func TestPackagesWithFilesOfArgs(t *testing.T) {
 				"../importing/filepathfixtures/third.go",
 			}}},
 		},
-		// packages
 		{
+			"package",
 			[]string{"internal/importing/filepathfixtures"},
 			[]Package{{
 				Name: p + "internal/importing/filepathfixtures",
@@ -121,6 +132,7 @@ func TestPackagesWithFilesOfArgs(t *testing.T) {
 			}},
 		},
 		{
+			"packages",
 			[]string{"internal/importing/filepathfixtures/..."},
 			[]Package{
 				{
@@ -139,124 +151,150 @@ func TestPackagesWithFilesOfArgs(t *testing.T) {
 				},
 			},
 		},
-	} {
-		var opts = &models.Options{}
-		got := PackagesWithFilesOfArgs(test.args, opts)
+	}
 
-		assert.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+	for _, test := range testCases {
+		test := test
+
+		t.Run(test.name, func(t *testing.T) {
+			var opts = &models.Options{}
+			got := PackagesWithFilesOfArgs(test.args, opts)
+
+			assert.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+		})
 	}
 }
 
 func TestFilesWithSkipWithoutTests(t *testing.T) {
-	p := os.Getenv("GOPATH") + "/src/"
-
-	for _, test := range []struct {
+	cases := []struct {
+		name   string
 		args   []string
 		expect []string
 	}{
-		// files
 		{
+			"single file",
 			[]string{"./filepathfixtures/first.go"},
 			[]string(nil),
 		},
 		{
+			"duplicate files",
 			[]string{"./filepathfixtures/second.go"},
 			[]string{"./filepathfixtures/second.go"},
 		},
-		// directories
 		{
+			"directory",
 			[]string{"./filepathfixtures"},
 			[]string{"filepathfixtures/second.go", "filepathfixtures/third.go"},
 		},
-		// packages
 		{
+			"package",
 			[]string{"internal/importing/filepathfixtures/..."},
 			[]string{
-				p + "internal/importing/filepathfixtures/second.go",
-				p + "internal/importing/filepathfixtures/third.go",
+				"internal/importing/filepathfixtures/second.go",
+				"internal/importing/filepathfixtures/third.go",
 			},
 		},
-	} {
-		var opts = &models.Options{}
-		opts.Config.SkipFileWithoutTest = true
-		got := FilesOfArgs(test.args, opts)
+	}
 
-		assert.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+	for _, testCase := range cases {
+		testCase := testCase
+
+		t.Run(testCase.name, func(t *testing.T) {
+			var opts = &models.Options{}
+			opts.Config.SkipFileWithoutTest = true
+			got := FilesOfArgs(testCase.args, opts)
+
+			assert.Equal(t, testCase.expect, got, fmt.Sprintf("With args: %#v", testCase.args))
+		})
 	}
 }
 
 func TestFilesWithSkipWithBuildTagsTests(t *testing.T) {
 	p := os.Getenv("GOPATH") + "/src/"
 
-	for _, test := range []struct {
+	testCases := []struct {
+		name   string
 		args   []string
 		expect []string
 	}{
-		// files
 		{
+			"file doesn't exist",
 			[]string{"./filepathfixtures/first.go"},
 			[]string(nil),
 		},
 		{
+			"file doesn't exist - 2",
 			[]string{"./filepathfixtures/third.go"},
 			[]string(nil),
 		},
 		{
+			"file",
 			[]string{"./filepathfixtures/second.go"},
 			[]string{"./filepathfixtures/second.go"},
 		},
-		// directories
 		{
+			"directories",
 			[]string{"./filepathfixtures"},
 			[]string{"filepathfixtures/second.go"},
 		},
-		// packages
 		{
+			"packages",
 			[]string{"internal/importing/filepathfixtures/..."},
 			[]string{
 				p + "internal/importing/filepathfixtures/second.go",
 			},
 		},
-	} {
-		var opts = &models.Options{}
-		opts.Config.SkipFileWithBuildTag = true
-		got := FilesOfArgs(test.args, opts)
+	}
 
-		assert.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+	for _, test := range testCases {
+		test := test
+
+		t.Run(test.name, func(t *testing.T) {
+
+			var opts = &models.Options{}
+			opts.Config.SkipFileWithBuildTag = true
+			got := FilesOfArgs(test.args, opts)
+
+			assert.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+		})
 	}
 }
 
 func TestFilesWithExcludedDirs(t *testing.T) {
 	p := os.Getenv("GOPATH") + "/src/"
 
-	for _, test := range []struct {
+	testCases := []struct {
+		name   string
 		args   []string
 		expect []string
 		config []string
 	}{
-		// files
 		{
+			"files doesn't exist",
 			[]string{"./filepathfixtures/first.go"},
 			[]string{"./filepathfixtures/first.go"},
 			[]string(nil),
 		},
 		{
+			"relative path to file",
 			[]string{"./filepathfixtures/second.go"},
 			[]string{"./filepathfixtures/second.go"},
 			[]string{"filepathfixtures"},
 		},
 		{
+			"incorrect path to file",
 			[]string{"filepathfixtures/second.go"},
 			[]string(nil),
 			[]string{"filepathfixtures"},
 		},
 		{
+			"incorrect path to file - 2",
 			[]string{"./filepathfixtures/second.go"},
 			[]string(nil),
 			[]string{"./filepathfixtures"},
 		},
-		// directories
 		{
+			"directories",
 			[]string{"./filepathfixtures/..."},
 			[]string{
 				"filepathfixtures/first.go",
@@ -266,16 +304,19 @@ func TestFilesWithExcludedDirs(t *testing.T) {
 			[]string{"filepathfixtures/secondfixturespackage"},
 		},
 		{
+			"directories - 1",
 			[]string{"./filepathfixtures/..."},
 			[]string(nil),
 			[]string{"filepathfixtures"},
 		},
 		{
+			"directories - 2",
 			[]string{"./filepathfixtures"},
 			[]string(nil),
 			[]string{"filepathfixtures"},
 		},
 		{
+			"directories - 3",
 			[]string{"./filepathfixtures"},
 			[]string{
 				"filepathfixtures/first.go",
@@ -285,8 +326,8 @@ func TestFilesWithExcludedDirs(t *testing.T) {
 			[]string(nil),
 		},
 
-		//packages
 		{
+			"packages",
 			[]string{"internal/importing/filepathfixtures/..."},
 			[]string{
 				p + "internal/importing/filepathfixtures/first.go",
@@ -297,6 +338,7 @@ func TestFilesWithExcludedDirs(t *testing.T) {
 			[]string{"filepathfixtures"},
 		},
 		{
+			"packages - 2",
 			[]string{"internal/importing/filepathfixtures/..."},
 			[]string{
 				p + "internal/importing/filepathfixtures/first.go",
@@ -305,12 +347,19 @@ func TestFilesWithExcludedDirs(t *testing.T) {
 			},
 			[]string{p + "internal/importing/filepathfixtures/secondfixturespackage/"},
 		},
-	} {
-		var opts = &models.Options{}
-		opts.Config.ExcludeDirs = test.config
+	}
 
-		got := FilesOfArgs(test.args, opts)
+	for _, test := range testCases {
+		test := test
 
-		assert.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+		t.Run(test.name, func(t *testing.T) {
+
+			var opts = &models.Options{}
+			opts.Config.ExcludeDirs = test.config
+
+			got := FilesOfArgs(test.args, opts)
+
+			assert.Equal(t, test.expect, got, fmt.Sprintf("With args: %#v", test.args))
+		})
 	}
 }

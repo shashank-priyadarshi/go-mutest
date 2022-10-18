@@ -112,11 +112,13 @@ func TestMainJSONReport(t *testing.T) {
 		ErrorCount:           0,
 		SkippedCount:         0,
 		TimeOutCount:         0,
-		Msi:                  big.NewFloat(0.5833333333333334),
+		Msi:                  big.NewFloat(0),
 		MutationCodeCoverage: 0,
 		CoveredCodeMsi:       0,
 		DuplicatedCount:      0,
 	}
+
+	expectedStats.Msi.Quo(big.NewFloat(float64(expectedStats.KilledCount)), big.NewFloat(float64(expectedStats.TotalMutantsCount)))
 
 	require.Equal(t, expectedStats, mutationReport.Stats)
 	require.Equal(t, 25, len(mutationReport.Escaped))

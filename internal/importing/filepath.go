@@ -21,8 +21,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
-
 	"github.com/JekaMas/go-mutesting/internal/models"
 )
 
@@ -79,24 +77,20 @@ func packagesWithFilesOfArgs(args []string, opts *models.Options) map[string]map
 			continue
 		}
 
-		spew.Dump(opts.Config)
 		if opts.Config.SkipFileWithoutTest || opts.Config.SkipFileWithBuildTag { // ignore files without tests
 			nameSize := len(filename)
 			if nameSize <= 3 {
-				fmt.Println("xxx-1")
 				continue
 			}
 
 			testName := filename[:nameSize-3] + "_test.go"
 			if !exists(testName) {
-				fmt.Println("xxx-2", testName)
 				continue
 			}
 
 			if opts.Config.SkipFileWithBuildTag { // ignore files with test with build tags
 				isBuildTag := regexpSearchInFile(testName, re)
 				if isBuildTag {
-					fmt.Println("xxx-3", testName)
 					continue
 				}
 			}
