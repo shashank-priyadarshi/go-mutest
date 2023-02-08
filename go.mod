@@ -1,4 +1,4 @@
-module github.com/JekaMas/go-mutesting
+module github.com/visu-suganya/go-mutesting
 
 go 1.19
 

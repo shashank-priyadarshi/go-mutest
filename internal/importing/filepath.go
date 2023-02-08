@@ -21,7 +21,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/JekaMas/go-mutesting/internal/models"
+	"github.com/visu-suganya/go-mutesting/internal/models"
 )
 
 func packagesWithFilesOfArgs(args []string, opts *models.Options) map[string]map[string]struct{} {

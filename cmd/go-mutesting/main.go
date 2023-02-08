@@ -26,18 +26,18 @@ import (
 	"github.com/jessevdk/go-flags"
 	"github.com/zimmski/osutil"
 
-	"github.com/JekaMas/go-mutesting/internal/importing"
-	"github.com/JekaMas/go-mutesting/internal/models"
+	"github.com/visu-suganya/go-mutesting/internal/importing"
+	"github.com/visu-suganya/go-mutesting/internal/models"
 
-	"github.com/JekaMas/go-mutesting"
-	"github.com/JekaMas/go-mutesting/astutil"
-	"github.com/JekaMas/go-mutesting/mutator"
-	_ "github.com/JekaMas/go-mutesting/mutator/arithmetic"
-	_ "github.com/JekaMas/go-mutesting/mutator/branch"
-	_ "github.com/JekaMas/go-mutesting/mutator/expression"
-	_ "github.com/JekaMas/go-mutesting/mutator/loop"
-	_ "github.com/JekaMas/go-mutesting/mutator/numbers"
-	_ "github.com/JekaMas/go-mutesting/mutator/statement"
+	"github.com/visu-suganya/go-mutesting"
+	"github.com/visu-suganya/go-mutesting/astutil"
+	"github.com/visu-suganya/go-mutesting/mutator"
+	_ "github.com/visu-suganya/go-mutesting/mutator/arithmetic"
+	_ "github.com/visu-suganya/go-mutesting/mutator/branch"
+	_ "github.com/visu-suganya/go-mutesting/mutator/expression"
+	_ "github.com/visu-suganya/go-mutesting/mutator/loop"
+	_ "github.com/visu-suganya/go-mutesting/mutator/numbers"
+	_ "github.com/visu-suganya/go-mutesting/mutator/statement"
 )
 
 const (
