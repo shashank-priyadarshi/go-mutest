@@ -7,7 +7,7 @@ go-mutesting is a framework for performing mutation testing on Go source code. I
 The following command mutates the go-mutesting project with all available mutators.
 
 ```bash
-go-mutesting github.com/avito-tech/go-mutesting/...
+go-mutesting github.com/visu-suganya/go-mutesting/...
 ```
 
 The execution of this command prints for every mutation if it was successfully tested or not. If not, the source code patch is printed out, so the mutation can be investigated. The following shows an example for a patch of a mutation.
