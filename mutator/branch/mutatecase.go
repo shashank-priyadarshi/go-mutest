@@ -21,6 +21,9 @@ func MutatorCase(pkg *types.Package, info *types.Info, node ast.Node) []mutator.
 
 	old := n.Body
 
+	if !mutator.CheckForPanic(old) {
+		return nil
+	}
 	return []mutator.Mutation{
 		{
 			Change: func() {

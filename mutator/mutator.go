@@ -48,3 +48,20 @@ func Register(name string, mutator Mutator) {
 
 	mutatorLookup[name] = mutator
 }
+
+func CheckForPanic(stmts []ast.Stmt) bool {
+	//Don't mutate if there's a panic statement
+	for _, node := range stmts {
+		switch n := node.(type) {
+		case *ast.ExprStmt:
+			call, ok := n.X.(*ast.CallExpr)
+			if ok {
+				ident, ok := call.Fun.(*ast.Ident)
+				if ok && ident.Name == "panic" {
+					return false
+				}
+			}
+		}
+	}
+	return true
+}

@@ -35,9 +35,18 @@ func MutatorRemoveStatement(pkg *types.Package, info *types.Info, node ast.Node)
 		l = n.List
 	case *ast.CaseClause:
 		l = n.Body
+	case *ast.CallExpr:
+		ident, ok := n.Fun.(*ast.Ident)
+		if ok && ident.Name == "panic" {
+			return nil
+		}
 	}
 
 	var mutations []mutator.Mutation
+
+	if !mutator.CheckForPanic(l) {
+		return nil
+	}
 
 	for i, ni := range l {
 		if checkRemoveStatement(ni) {

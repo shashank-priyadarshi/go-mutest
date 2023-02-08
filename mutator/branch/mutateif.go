@@ -20,7 +20,9 @@ func MutatorIf(pkg *types.Package, info *types.Info, node ast.Node) []mutator.Mu
 	}
 
 	old := n.Body.List
-
+	if !mutator.CheckForPanic(old) {
+		return nil
+	}
 	return []mutator.Mutation{
 		{
 			Change: func() {
