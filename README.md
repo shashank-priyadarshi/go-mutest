@@ -341,6 +341,8 @@ Searches for `&&` and <code>\|\|</code> operators and makes each term of the ope
 #### statement/remove
 Removes assignment, increment, decrement and expression statements.
 
+## Panic statements are not mutated !!!
+
 ## Config file
 
 There is a configuration file where you can fine-tune mutation testing.  
