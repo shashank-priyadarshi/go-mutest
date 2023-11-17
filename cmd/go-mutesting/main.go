@@ -34,6 +34,7 @@ import (
 	"github.com/visu-suganya/go-mutesting/mutator"
 	_ "github.com/visu-suganya/go-mutesting/mutator/arithmetic"
 	_ "github.com/visu-suganya/go-mutesting/mutator/branch"
+	_ "github.com/visu-suganya/go-mutesting/mutator/conditional"
 	_ "github.com/visu-suganya/go-mutesting/mutator/expression"
 	_ "github.com/visu-suganya/go-mutesting/mutator/loop"
 	_ "github.com/visu-suganya/go-mutesting/mutator/numbers"
