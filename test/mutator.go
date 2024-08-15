@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/visu-suganya/go-mutesting"
-	"github.com/visu-suganya/go-mutesting/mutator"
+	"github.com/shashank-priyadarshi/go-mutest"
+	"github.com/shashank-priyadarshi/go-mutest/mutator"
 )
 
 // Mutator tests a mutator.

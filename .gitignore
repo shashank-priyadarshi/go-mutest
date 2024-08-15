@@ -22,3 +22,9 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# IDE configs
+.idea
+.vscode
+
+*logs*

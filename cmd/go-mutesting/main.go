@@ -26,19 +26,19 @@ import (
 	"github.com/jessevdk/go-flags"
 	"github.com/zimmski/osutil"
 
-	"github.com/visu-suganya/go-mutesting/internal/importing"
-	"github.com/visu-suganya/go-mutesting/internal/models"
+	"github.com/shashank-priyadarshi/go-mutest/internal/importing"
+	"github.com/shashank-priyadarshi/go-mutest/internal/models"
 
-	"github.com/visu-suganya/go-mutesting"
-	"github.com/visu-suganya/go-mutesting/astutil"
-	"github.com/visu-suganya/go-mutesting/mutator"
-	_ "github.com/visu-suganya/go-mutesting/mutator/arithmetic"
-	_ "github.com/visu-suganya/go-mutesting/mutator/branch"
-	_ "github.com/visu-suganya/go-mutesting/mutator/conditional"
-	_ "github.com/visu-suganya/go-mutesting/mutator/expression"
-	_ "github.com/visu-suganya/go-mutesting/mutator/loop"
-	_ "github.com/visu-suganya/go-mutesting/mutator/numbers"
-	_ "github.com/visu-suganya/go-mutesting/mutator/statement"
+	"github.com/shashank-priyadarshi/go-mutest"
+	"github.com/shashank-priyadarshi/go-mutest/astutil"
+	"github.com/shashank-priyadarshi/go-mutest/mutator"
+	_ "github.com/shashank-priyadarshi/go-mutest/mutator/arithmetic"
+	_ "github.com/shashank-priyadarshi/go-mutest/mutator/branch"
+	_ "github.com/shashank-priyadarshi/go-mutest/mutator/conditional"
+	_ "github.com/shashank-priyadarshi/go-mutest/mutator/expression"
+	_ "github.com/shashank-priyadarshi/go-mutest/mutator/loop"
+	_ "github.com/shashank-priyadarshi/go-mutest/mutator/numbers"
+	_ "github.com/shashank-priyadarshi/go-mutest/mutator/statement"
 )
 
 const (

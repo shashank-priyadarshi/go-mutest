@@ -6,7 +6,7 @@ import (
 	"go/types"
 	"strconv"
 
-	"github.com/visu-suganya/go-mutesting/mutator"
+	"github.com/shashank-priyadarshi/go-mutest/mutator"
 )
 
 func init() {

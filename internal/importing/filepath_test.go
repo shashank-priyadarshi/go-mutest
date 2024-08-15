@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/visu-suganya/go-mutesting/internal/models"
+	"github.com/shashank-priyadarshi/go-mutest/internal/models"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -52,7 +52,7 @@ func TestFilesOfArgs(t *testing.T) {
 		},
 		{
 			"package",
-			[]string{"github.com/visu-suganya/go-mutesting/internal/importing/filepathfixtures"},
+			[]string{"github.com/shashank-priyadarshi/go-mutest/internal/importing/filepathfixtures"},
 			[]string{
 				p + "internal/importing/filepathfixtures/first.go",
 				p + "internal/importing/filepathfixtures/second.go",
@@ -61,7 +61,7 @@ func TestFilesOfArgs(t *testing.T) {
 		},
 		{
 			"packages",
-			[]string{"github.com/visu-suganya/go-mutesting/internal/importing/filepathfixtures/..."},
+			[]string{"github.com/shashank-priyadarshi/go-mutest/internal/importing/filepathfixtures/..."},
 			[]string{
 				p + "internal/importing/filepathfixtures/first.go",
 				p + "internal/importing/filepathfixtures/second.go",

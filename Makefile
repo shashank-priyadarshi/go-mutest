@@ -1,7 +1,7 @@
 .PHONY: all clean clean-coverage generate install install-dependencies install-tools lint test test-verbose test-verbose-with-coverage
 
 export ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-export PKG := github.com/visu-suganya/go-mutesting
+export PKG := github.com/shashank-priyadarshi/go-mutest
 export ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 export TEST_TIMEOUT_IN_SECONDS := 240
@@ -37,7 +37,7 @@ install:
 
 install-dependencies:
 	go mod vendor
-	go test -i -v $(PKG)/...
+	go test -v $(PKG)/...
 .PHONY: install-dependencies
 
 install-tools:

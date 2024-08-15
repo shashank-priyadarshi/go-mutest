@@ -7,7 +7,7 @@ func foo() int {
 		if i == 0 {
 			n++
 		} else if i*1 == 2-1 {
-			n += 2
+			n += 1
 		} else {
 			n += 3
 		}

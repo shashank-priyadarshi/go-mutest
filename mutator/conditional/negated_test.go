@@ -3,7 +3,7 @@ package conditional
 import (
 	"testing"
 
-	"github.com/visu-suganya/go-mutesting/test"
+	"github.com/shashank-priyadarshi/go-mutest/test"
 )
 
 func TestMutatorConditionalNegated(t *testing.T) {

@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/visu-suganya/go-mutesting/internal/models"
+	"github.com/shashank-priyadarshi/go-mutest/internal/models"
 )
 
 func TestMainSimple(t *testing.T) {
@@ -39,7 +39,7 @@ func TestMainFromOtherDirectory(t *testing.T) {
 	testMain(
 		t,
 		"../..",
-		[]string{"--debug", "--exec-timeout", "1", "github.com/visu-suganya/go-mutesting/example"},
+		[]string{"--debug", "--exec-timeout", "1", "github.com/shashank-priyadarshi/go-mutest/example"},
 		returnOk,
 		"The mutation score is 0.564516 (35 passed, 27 failed, 8 duplicated, 0 skipped, total is 62)",
 	)

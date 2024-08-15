@@ -3,7 +3,7 @@ package loop
 import (
 	"testing"
 
-	"github.com/visu-suganya/go-mutesting/test"
+	"github.com/shashank-priyadarshi/go-mutest/test"
 )
 
 func TestMutatorLoopCondition(t *testing.T) {
