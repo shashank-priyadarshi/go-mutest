@@ -1,6 +1,6 @@
 #/bin/sh
 
-_go_mutesting() {
+_go_mutest() {
 	args=("${COMP_WORDS[@]:1:$COMP_CWORD}")
 
 	local IFS=$'\n'
@@ -8,4 +8,4 @@ _go_mutesting() {
 	return 1
 }
 
-complete -F _go_mutesting go-mutesting
+complete -F _go_mutest go-mutest

@@ -1,4 +1,4 @@
-package mutesting
+package mutest
 
 import (
 	"testing"

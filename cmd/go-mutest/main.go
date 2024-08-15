@@ -48,11 +48,11 @@ const (
 )
 
 func checkArguments(args []string, opts *models.Options) (bool, int) {
-	p := flags.NewNamedParser("go-mutesting", flags.None)
+	p := flags.NewNamedParser("go-mutest", flags.None)
 
 	p.ShortDescription = "Mutation testing for Go source code"
 
-	if _, err := p.AddGroup("go-mutesting", "go-mutesting arguments", opts); err != nil {
+	if _, err := p.AddGroup("go-mutest", "go-mutest arguments", opts); err != nil {
 		return true, exitError(err.Error())
 	}
 
@@ -150,12 +150,12 @@ func mainCmd(args []string) int {
 		for _, file := range files {
 			fmt.Println(file)
 
-			src, _, err := mutesting.ParseFile(file)
+			src, _, err := mutest.ParseFile(file)
 			if err != nil {
 				return exitError("Could not open file %q: %v", file, err)
 			}
 
-			mutesting.PrintWalk(src)
+			mutest.PrintWalk(src)
 
 			fmt.Println()
 		}
@@ -207,7 +207,7 @@ MUTATOR:
 		})
 	}
 
-	tmpDir, err := os.MkdirTemp("", "go-mutesting-")
+	tmpDir, err := os.MkdirTemp("", "go-mutest-")
 	if err != nil {
 		panic(err)
 	}
@@ -223,7 +223,7 @@ MUTATOR:
 	for _, file := range files {
 		verbose(opts, "Mutate %q", file)
 
-		src, fset, pkg, info, err := mutesting.ParseAndTypeCheckFile(file)
+		src, fset, pkg, info, err := mutest.ParseAndTypeCheckFile(file)
 		if err != nil {
 			return exitError(err.Error())
 		}
@@ -340,7 +340,7 @@ func mutate(
 	for _, m := range mutators {
 		debug(opts, "Mutator %s", m.Name)
 
-		changed := mutesting.MutateWalk(pkg, info, node, m.Mutator)
+		changed := mutest.MutateWalk(pkg, info, node, m.Mutator)
 
 		for {
 			_, ok := <-changed

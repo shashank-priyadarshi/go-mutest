@@ -1,4 +1,4 @@
-package mutesting
+package mutest
 
 import (
 	"fmt"
@@ -7,11 +7,10 @@ import (
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	"golang.org/x/tools/go/loader" //nolint:staticcheck
+	//nolint:staticcheck
 )
 
 // ParseFile parses the content of the given file and returns the corresponding ast.File node and its file set for positional information.

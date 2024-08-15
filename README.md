@@ -1,13 +1,13 @@
-# go-mutesting [![GoDoc](https://godoc.org/github.com/avito-tech/go-mutesting?status.png)](https://godoc.org/github.com/avito-tech/go-mutesting) [![Build Status](https://travis-ci.org/avito-tech/go-mutesting.svg?branch=master)](https://travis-ci.org/avito-tech/go-mutesting) [![Coverage Status](https://coveralls.io/repos/avito-tech/go-mutesting/badge.png?branch=master)](https://coveralls.io/r/avito-tech/go-mutesting?branch=master)
+# go-mutest [![GoDoc](https://godoc.org/github.com/shashank-priyadarshi/go-mutest?status.png)](https://godoc.org/github.com/shashank-priyadarshi/go-mutest) [![Build Status](https://travis-ci.org/shashank-priyadarshi/go-mutest.svg?branch=master)](https://travis-ci.org/shashank-priyadarshi/go-mutest) [![Coverage Status](https://coveralls.io/repos/shashank-priyadarshi/go-mutest/badge.png?branch=master)](https://coveralls.io/r/shashank-priyadarshi/go-mutest?branch=master)
 
-go-mutesting is a framework for performing mutation testing on Go source code. Its main purpose is to find source code, which is not covered by any tests.
+go-mutest is a framework for performing mutation testing on Go source code. Its main purpose is to find source code, which is not covered by any tests.
 
 ## Quick example
 
-The following command mutates the go-mutesting project with all available mutators.
+The following command mutates the go-mutest project with all available mutators.
 
 ```bash
-go-mutesting github.com/shashank-priyadarshi/go-mutest/...
+go-mutest github.com/shashank-priyadarshi/go-mutest/...
 ```
 
 The execution of this command prints for every mutation if it was successfully tested or not. If not, the source code patch is printed out, so the mutation can be investigated. The following shows an example for a patch of a mutation.
@@ -25,7 +25,7 @@ for _, d := range opts.Mutator.DisableMutators {
 
 The example shows that the right term `(!pattern && name == d)` of the `||` operator is made irrelevant by substituting it with `false`. Since this change of the source code is not detected by the test suite, meaning the test suite did not fail, we can mark it as untested code.
 
-The next mutation shows code from the `removeNode` method of a [linked list](https://github.com/avito-tech/container/blob/master/list/linkedlist/linkedlist.go) implementation.
+The next mutation shows code from the `removeNode` method of a [linked list](https://github.com/shashank-priyadarshi/container/blob/master/list/linkedlist/linkedlist.go) implementation.
 
 ```diff
 	}
@@ -42,7 +42,7 @@ We know that the code originates from a remove method which means that the mutat
 ## <a name="table-of-content"></a>Table of content
 
 - [What is mutation testing?](#what-is-mutation-testing)
-- [How do I use go-mutesting?](#how-do-i-use-go-mutesting)
+- [How do I use go-mutest?](#how-do-i-use-go-mutest)
 - [How do I write my own mutation exec commands?](#write-mutation-exec-commands)
 - [Which mutators are implemented?](#list-of-mutators)
 - [Other mutation testing projects and their flaws](#other-projects)
@@ -60,11 +60,11 @@ The definition of mutation testing is best quoted from Wikipedia:
 
 Although the definition states that the main purpose of mutation testing is finding implementation cases which are not covered by tests, other implementation flaws can be found too. Mutation testing can for example uncover dead and unneeded code.
 
-Mutation testing is also especially interesting for comparing automatically generated test suites with manually written test suites. This was the original intention of go-mutesting which is used to evaluate the generic fuzzing and delta-debugging framework [Tavor](https://github.com/zimmski/tavor).
+Mutation testing is also especially interesting for comparing automatically generated test suites with manually written test suites. This was the original intention of go-mutest which is used to evaluate the generic fuzzing and delta-debugging framework [Tavor](https://github.com/zimmski/tavor).
 
-## <a name="how-do-i-use-go-mutesting"></a>How do I use go-mutesting?
+## <a name="how-do-i-use-go-mutest"></a>How do I use go-mutest?
 
-go-mutesting includes a binary which is go-getable.
+go-mutest includes a binary which is go-getable.
 
 ```bash
 go get -t -v github.com/shashank-priyadarshi/go-mutest/...
@@ -73,7 +73,7 @@ go get -t -v github.com/shashank-priyadarshi/go-mutest/...
 The binary's help can be invoked by executing the binary without arguments or with the `--help` argument.
 
 ```bash
-go-mutesting --help
+go-mutest --help
 ```
 
 > **Note**: This README describes only a few of the available arguments. It is therefore advisable to examine the output of the `--help` argument.
@@ -83,7 +83,7 @@ The targets of the mutation testing can be defined as arguments to the binary. E
 The following example gathers all Go files which are defined by the targets and generate mutations with all available mutators of the binary.
 
 ```bash
-go-mutesting parse.go example/ github.com/avito-tech/go-mutesting/mutator/...
+go-mutest parse.go example/ github.com/shashank-priyadarshi/go-mutest/mutator/...
 ```
 
 Every mutation has to be tested using an [exec command](#write-mutation-exec-commands). By default the built-in exec command is used, which tests a mutation using the following steps:
@@ -92,20 +92,20 @@ Every mutation has to be tested using an [exec command](#write-mutation-exec-com
 - Execute all tests of the package of the mutated file.
 - Report if the mutation was killed.
 
-Alternatively the `--exec` argument can be used to invoke an external exec command. The [/scripts/exec](/scripts/exec) directory holds basic exec commands for Go projects. The [test-mutated-package.sh](/scripts/exec/test-mutated-package.sh) script implements all steps and almost all features of the built-in exec command. It can be for example used to test the [github.com/avito-tech/go-mutesting/example](/example) package.
+Alternatively the `--exec` argument can be used to invoke an external exec command. The [/scripts/exec](/scripts/exec) directory holds basic exec commands for Go projects. The [test-mutated-package.sh](/scripts/exec/test-mutated-package.sh) script implements all steps and almost all features of the built-in exec command. It can be for example used to test the [github.com/shashank-priyadarshi/go-mutest/example](/example) package.
 
 ```bash
-go-mutesting --exec "$GOPATH/src/github.com/avito-tech/go-mutesting/scripts/exec/test-mutated-package.sh" github.com/avito-tech/go-mutesting/example
+go-mutest --exec "$GOPATH/src/github.com/shashank-priyadarshi/go-mutest/scripts/exec/test-mutated-package.sh" github.com/shashank-priyadarshi/go-mutest/example
 ```
 
 The execution will print the following output.
 
-> **Note**: This output is from an older version of go-mutesting. Up to date versions of go-mutesting will have different mutations.
+> **Note**: This output is from an older version of go-mutest. Up to date versions of go-mutest will have different mutations.
 
 ```diff
-PASS "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/go-mutesting/example/example.go.0" with checksum b705f4c99e6d572de509609eb0a625be
-PASS "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/go-mutesting/example/example.go.1" with checksum eb54efffc5edfc7eba2b276371b29836
-PASS "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/go-mutesting/example/example.go.2" with checksum 011df9567e5fee9bf75cbe5d5dc1c81f
+PASS "/tmp/go-mutest-422402775//home/shashank-priyadarshi/go/src/github.com/shashank-priyadarshi/go-mutest/example/example.go.0" with checksum b705f4c99e6d572de509609eb0a625be
+PASS "/tmp/go-mutest-422402775//home/shashank-priyadarshi/go/src/github.com/shashank-priyadarshi/go-mutest/example/example.go.1" with checksum eb54efffc5edfc7eba2b276371b29836
+PASS "/tmp/go-mutest-422402775//home/shashank-priyadarshi/go/src/github.com/shashank-priyadarshi/go-mutest/example/example.go.2" with checksum 011df9567e5fee9bf75cbe5d5dc1c81f
 --- Original
 +++ New
 @@ -16,7 +16,7 @@
@@ -117,9 +117,9 @@ PASS "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/
         }
 
         n++
-FAIL "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/go-mutesting/example/example.go.3" with checksum 82fc14acf7b561598bfce25bf3a162a2
-PASS "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/go-mutesting/example/example.go.4" with checksum 5720f1bf404abea121feb5a50caf672c
-PASS "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/go-mutesting/example/example.go.5" with checksum d6c1b5e25241453128f9f3bf1b9e7741
+FAIL "/tmp/go-mutest-422402775//home/shashank-priyadarshi/go/src/github.com/shashank-priyadarshi/go-mutest/example/example.go.3" with checksum 82fc14acf7b561598bfce25bf3a162a2
+PASS "/tmp/go-mutest-422402775//home/shashank-priyadarshi/go/src/github.com/shashank-priyadarshi/go-mutest/example/example.go.4" with checksum 5720f1bf404abea121feb5a50caf672c
+PASS "/tmp/go-mutest-422402775//home/shashank-priyadarshi/go/src/github.com/shashank-priyadarshi/go-mutest/example/example.go.5" with checksum d6c1b5e25241453128f9f3bf1b9e7741
 --- Original
 +++ New
 @@ -24,7 +24,6 @@
@@ -130,8 +130,8 @@ PASS "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/
 
         return n
  }
-FAIL "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/go-mutesting/example/example.go.6" with checksum 5b1ca0cfedd786d9df136a0e042df23a
-PASS "/tmp/go-mutesting-422402775//home/avito-tech/go/src/github.com/avito-tech/go-mutesting/example/example.go.8" with checksum 6928f4458787c7042c8b4505888300a6
+FAIL "/tmp/go-mutest-422402775//home/shashank-priyadarshi/go/src/github.com/shashank-priyadarshi/go-mutest/example/example.go.6" with checksum 5b1ca0cfedd786d9df136a0e042df23a
+PASS "/tmp/go-mutest-422402775//home/shashank-priyadarshi/go/src/github.com/shashank-priyadarshi/go-mutest/example/example.go.8" with checksum 6928f4458787c7042c8b4505888300a6
 The mutation score is 0.750000 (6 passed, 2 failed, 0 skipped, total is 8)
 ```
 
@@ -141,30 +141,30 @@ The summary also shows the **mutation score** which is a metric on how many muta
 
 ### <a name="black-list-false-positives"></a>Blacklist false positives
 
-Mutation testing can generate many false positives since mutation algorithms do not fully understand the given source code. `early exits` are one common example. They can be implemented as optimizations and will almost always trigger a false-positive since the unoptimized code path will be used which will lead to the same result. go-mutesting is meant to be used as an addition to automatic test suites. It is therefore necessary to mark such mutations as false-positives. This is done with the `--blacklist` argument. The argument defines a file which contains in every line a MD5 checksum of a mutation. These checksums can then be used to ignore mutations.
+Mutation testing can generate many false positives since mutation algorithms do not fully understand the given source code. `early exits` are one common example. They can be implemented as optimizations and will almost always trigger a false-positive since the unoptimized code path will be used which will lead to the same result. go-mutest is meant to be used as an addition to automatic test suites. It is therefore necessary to mark such mutations as false-positives. This is done with the `--blacklist` argument. The argument defines a file which contains in every line a MD5 checksum of a mutation. These checksums can then be used to ignore mutations.
 
 > **Note**: The blacklist feature is currently badly implemented as a change in the original source code will change all checksums.
 
-The example output of the [How do I use go-mutesting?](#how-do-i-use-go-mutesting) section describes a mutation `example.go.6` which has the checksum `5b1ca0cfedd786d9df136a0e042df23a`. If we want to mark this mutation as a false-positive, we simple create a file with the following content.
+The example output of the [How do I use go-mutest?](#how-do-i-use-go-mutest) section describes a mutation `example.go.6` which has the checksum `5b1ca0cfedd786d9df136a0e042df23a`. If we want to mark this mutation as a false-positive, we simple create a file with the following content.
 
 ```
 5b1ca0cfedd786d9df136a0e042df23a
 ```
 
-The blacklist file, which is named `example.blacklist` in this example, can then be used to invoke go-mutesting.
+The blacklist file, which is named `example.blacklist` in this example, can then be used to invoke go-mutest.
 
 ```bash
-go-mutesting --blacklist example.blacklist github.com/avito-tech/go-mutesting/example
+go-mutest --blacklist example.blacklist github.com/shashank-priyadarshi/go-mutest/example
 ```
 
 The execution will print the following output.
 
-> **Note**: This output is from an older version of go-mutesting. Up to date versions of go-mutesting will have different mutations.
+> **Note**: This output is from an older version of go-mutest. Up to date versions of go-mutest will have different mutations.
 
 ```diff
-PASS "/tmp/go-mutesting-208240643/example.go.0" with checksum b705f4c99e6d572de509609eb0a625be
-PASS "/tmp/go-mutesting-208240643/example.go.1" with checksum eb54efffc5edfc7eba2b276371b29836
-PASS "/tmp/go-mutesting-208240643/example.go.2" with checksum 011df9567e5fee9bf75cbe5d5dc1c81f
+PASS "/tmp/go-mutest-208240643/example.go.0" with checksum b705f4c99e6d572de509609eb0a625be
+PASS "/tmp/go-mutest-208240643/example.go.1" with checksum eb54efffc5edfc7eba2b276371b29836
+PASS "/tmp/go-mutest-208240643/example.go.2" with checksum 011df9567e5fee9bf75cbe5d5dc1c81f
 --- Original
 +++ New
 @@ -16,7 +16,7 @@
@@ -176,10 +176,10 @@ PASS "/tmp/go-mutesting-208240643/example.go.2" with checksum 011df9567e5fee9bf7
         }
 
         n++
-FAIL "/tmp/go-mutesting-208240643/example.go.3" with checksum 82fc14acf7b561598bfce25bf3a162a2
-PASS "/tmp/go-mutesting-208240643/example.go.4" with checksum 5720f1bf404abea121feb5a50caf672c
-PASS "/tmp/go-mutesting-208240643/example.go.5" with checksum d6c1b5e25241453128f9f3bf1b9e7741
-PASS "/tmp/go-mutesting-208240643/example.go.8" with checksum 6928f4458787c7042c8b4505888300a6
+FAIL "/tmp/go-mutest-208240643/example.go.3" with checksum 82fc14acf7b561598bfce25bf3a162a2
+PASS "/tmp/go-mutest-208240643/example.go.4" with checksum 5720f1bf404abea121feb5a50caf672c
+PASS "/tmp/go-mutest-208240643/example.go.5" with checksum d6c1b5e25241453128f9f3bf1b9e7741
+PASS "/tmp/go-mutest-208240643/example.go.8" with checksum 6928f4458787c7042c8b4505888300a6
 The mutation score is 0.857143 (6 passed, 1 failed, 0 skipped, total is 7)
 ```
 
@@ -362,21 +362,21 @@ The config contains the following parameters:
 
 ## <a name="write-mutators"></a>How do I write my own mutators?
 
-Each mutator must implement the `Mutator` interface of the [github.com/avito-tech/go-mutesting/mutator](https://godoc.org/github.com/avito-tech/go-mutesting/mutator#Mutator) package. The methods of the interface are described in detail in the source code documentation.
+Each mutator must implement the `Mutator` interface of the [github.com/shashank-priyadarshi/go-mutest/mutator](https://godoc.org/github.com/shashank-priyadarshi/go-mutest/mutator#Mutator) package. The methods of the interface are described in detail in the source code documentation.
 
-Additionally each mutator has to be registered with the `Register` function of the [github.com/avito-tech/go-mutesting/mutator](https://godoc.org/github.com/avito-tech/go-mutesting/mutator#Mutator) package to make it usable by the binary.
+Additionally each mutator has to be registered with the `Register` function of the [github.com/shashank-priyadarshi/go-mutest/mutator](https://godoc.org/github.com/shashank-priyadarshi/go-mutest/mutator#Mutator) package to make it usable by the binary.
 
-Examples for mutators can be found in the [github.com/avito-tech/go-mutesting/mutator](https://godoc.org/github.com/avito-tech/go-mutesting/mutator) package and its sub-packages.
+Examples for mutators can be found in the [github.com/shashank-priyadarshi/go-mutest/mutator](https://godoc.org/github.com/shashank-priyadarshi/go-mutest/mutator) package and its sub-packages.
 
 ## <a name="other-projects"></a>Other mutation testing projects and their flaws
 
-go-mutesting is not the first project to implement mutation testing for Go source code. A quick search uncovers the following projects.
+go-mutest is not the first project to implement mutation testing for Go source code. A quick search uncovers the following projects.
 
 - https://github.com/darkhelmet/manbearpig
 - https://github.com/kisielk/mutator
 - https://github.com/StefanSchroeder/Golang-Mutation-testing
 
-All of them have significant flaws in comparison to go-mutesting:
+All of them have significant flaws in comparison to go-mutest:
 
 - Only one type (or even one case) of mutation is implemented.
 - Can only be used for one mutator at a time (manbearpig, Golang-Mutation-testing).
@@ -390,4 +390,4 @@ All of them have significant flaws in comparison to go-mutesting:
 
 ## <a name="feature-request"></a>Can I make feature requests and report bugs and problems?
 
-Sure, just submit an [issue via the project tracker](https://github.com/avito-tech/go-mutesting/issues/new) and we will see what I can do.
+Sure, just submit an [issue via the project tracker](https://github.com/shashank-priyadarshi/go-mutest/issues/new) and we will see what I can do.

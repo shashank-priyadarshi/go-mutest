@@ -45,7 +45,7 @@ func foo() int {
 }
 
 func bar() int {
-	return 4
+	return 3
 }
 
 func baz() int { //nolint:unused
