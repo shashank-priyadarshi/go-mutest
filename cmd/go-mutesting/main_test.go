@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"math/big"
 	"os"
 	"testing"
@@ -66,7 +65,7 @@ func TestMainSkipWithoutTest(t *testing.T) {
 }
 
 func TestMainJSONReport(t *testing.T) {
-	tmpDir, err := os.MkdirTemp("", "go-mutesting-main-test-")
+	tmpDir, err := os.MkdirTemp("", "go-mutest-main-test-")
 	require.NoError(t, err)
 
 	reportFileName := "reportTestMainJSONReport.json"
@@ -97,7 +96,7 @@ func TestMainJSONReport(t *testing.T) {
 		}
 	}()
 
-	jsonData, err := ioutil.ReadFile(jsonFile)
+	jsonData, err := os.ReadFile(jsonFile)
 	require.NoError(t, err)
 
 	var mutationReport models.Report

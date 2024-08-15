@@ -11,7 +11,6 @@ import (
 	"go/token"
 	"go/types"
 	"io"
-	"io/ioutil"
 	"log"
 	"math/big"
 	"os"
@@ -208,7 +207,7 @@ MUTATOR:
 		})
 	}
 
-	tmpDir, err := ioutil.TempDir("", "go-mutesting-")
+	tmpDir, err := os.MkdirTemp("", "go-mutesting-")
 	if err != nil {
 		panic(err)
 	}
@@ -350,7 +349,7 @@ func mutate(
 				break
 			}
 
-			originalSourceCode, err := ioutil.ReadFile(originalFile)
+			originalSourceCode, err := os.ReadFile(originalFile)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -376,7 +375,7 @@ func mutate(
 
 					debug(opts, "Exited with %d", execExitCode)
 
-					mutatedSourceCode, err := ioutil.ReadFile(mutationFile)
+					mutatedSourceCode, err := os.ReadFile(mutationFile)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -596,7 +595,7 @@ func saveAST(mutationBlackList map[string]struct{}, file string, fset *token.Fil
 		return "", false, err
 	}
 
-	err = ioutil.WriteFile(file, src, 0666)
+	err = os.WriteFile(file, src, 0666)
 	if err != nil {
 		return "", false, err
 	}

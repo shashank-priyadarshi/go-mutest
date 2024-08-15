@@ -12,7 +12,6 @@ so TODO and FIXME. Heck I also give you a WORKAROUND.
 import (
 	"fmt"
 	"go/build"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -51,7 +50,7 @@ func packagesWithFilesOfArgs(args []string, opts *models.Options) map[string]map
 	pkgs := make(map[string]map[string]struct{})
 	var re *regexp.Regexp
 	if opts.Config.SkipFileWithBuildTag {
-		re = regexp.MustCompile("\\+build (.*)(\\s+)package")
+		re = regexp.MustCompile("\\+build (.*)(\\s+)package") //nolint:gosimple
 	}
 
 	for _, filename := range filenames {
@@ -119,7 +118,7 @@ func packagesWithFilesOfArgs(args []string, opts *models.Options) map[string]map
 }
 
 func regexpSearchInFile(file string, re *regexp.Regexp) bool {
-	contents, err := ioutil.ReadFile(file)
+	contents, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)
 	}
